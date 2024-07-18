@@ -1,0 +1,58 @@
+class Solution {
+    public void gameOfLife(int[][] board) {
+      if (board == null || board.length == 0) return;
+        
+        int rows = board.length;
+        int cols = board[0].length;
+        
+        int[][] nextState = new int[rows][cols];
+        
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                int liveNeighbors = countLiveNeighbors(board, i, j, rows, cols);
+                
+                
+                if (board[i][j] == 1) {
+                    if (liveNeighbors < 2 || liveNeighbors > 3) {
+                        nextState[i][j] = 0; // Live cell dies
+                    } else {
+                        nextState[i][j] = 1; // Live cell survives
+                    }
+                } else {
+                    if (liveNeighbors == 3) {
+                        nextState[i][j] = 1; // Dead cell becomes alive
+                    } else {
+                        nextState[i][j] = 0; // Dead cell remains dead
+                    }
+                }
+            }
+        }
+        
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                board[i][j] = nextState[i][j];
+            }
+        }
+    }
+    private int countLiveNeighbors(int[][] board, int row, int col, int rows, int cols) {
+        int liveNeighbors = 0;
+        int[] directions = {-1, 0, 1};
+        
+        for (int i : directions) {
+            for (int j : directions) {
+                if (i == 0 && j == 0) continue; // Skip the cell itself
+                int r = row + i;
+                int c = col + j;
+                
+                if (r >= 0 && r < rows && c >= 0 && c < cols && (board[r][c] == 1 || board[r][c] == 2)) {
+                    liveNeighbors++;
+                }
+            }
+        }
+        
+        return liveNeighbors;
+    }
+
+}
