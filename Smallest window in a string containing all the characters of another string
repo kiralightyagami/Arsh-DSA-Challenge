@@ -1,0 +1,59 @@
+class Solution
+{
+    
+    public static String smallestWindow(String s, String p)
+    {
+        if (s == null || p == null || s.length() < p.length()) {
+            return "-1";
+        }
+
+        
+        HashMap<Character, Integer> patternCount = new HashMap<>();
+        for (char c : p.toCharArray()) {
+            patternCount.put(c, patternCount.getOrDefault(c, 0) + 1);
+        }
+
+        
+        int left = 0, right = 0;
+        int count = 0;
+        int minLen = Integer.MAX_VALUE;
+        int startIndex = -1;
+
+        
+        HashMap<Character, Integer> windowCount = new HashMap<>();
+
+        while (right < s.length()) {
+            char rightChar = s.charAt(right);
+            windowCount.put(rightChar, windowCount.getOrDefault(rightChar, 0) + 1);
+
+            
+            if (patternCount.containsKey(rightChar) &&
+                windowCount.get(rightChar).intValue() <= patternCount.get(rightChar).intValue()) {
+                count++;
+            }
+
+            
+            while (count == p.length()) {
+                
+                if (right - left + 1 < minLen) {
+                    minLen = right - left + 1;
+                    startIndex = left;
+                }
+
+                
+                char leftChar = s.charAt(left);
+                windowCount.put(leftChar, windowCount.get(leftChar) - 1);
+                if (patternCount.containsKey(leftChar) &&
+                    windowCount.get(leftChar).intValue() < patternCount.get(leftChar).intValue()) {
+                    count--;
+                }
+                left++;
+            }
+
+            right++;
+        }
+
+        return startIndex == -1 ? "-1" : s.substring(startIndex, startIndex + minLen);
+   
+    }
+}
