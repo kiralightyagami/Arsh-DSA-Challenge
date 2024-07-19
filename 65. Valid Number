@@ -1,0 +1,34 @@
+class Solution {
+    public boolean isNumber(String s) {
+        
+        s = s.trim();
+
+        
+        boolean hasNum = false;  
+        boolean hasDot = false;  
+        boolean hasE = false;    
+        boolean hasNumAfterE = true;  
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c >= '0' && c <= '9') {
+                hasNum = true;
+                hasNumAfterE = true; // Any number after e
+            } else if (c == '.') {
+                if (hasDot || hasE) return false;
+                hasDot = true;
+            } else if (c == 'e' || c == 'E') {
+                if (hasE || !hasNum) return false;
+                hasE = true;
+                hasNumAfterE = false; // We need a number after e
+            } else if (c == '+' || c == '-') {
+                if (i != 0 && s.charAt(i - 1) != 'e' && s.charAt(i - 1) != 'E') return false;
+                hasNumAfterE = false; 
+            } else {
+                return false;
+            }
+        }
+
+        return hasNum && hasNumAfterE;
+    }
+}
