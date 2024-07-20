@@ -1,0 +1,32 @@
+class Solution
+{
+    public int solveWordWrap (int[] nums, int k)
+    {
+        int n = nums.length;
+        int[] dp = new int[n + 1];
+        
+        
+        for (int i = 0; i <= n; i++) {
+            dp[i] = Integer.MAX_VALUE;
+        }
+        
+        dp[0] = 0;
+        
+        
+        for (int i = 1; i <= n; i++) {
+            int length = -1;
+            for (int j = i; j > 0; j--) {
+                length += nums[j - 1] + 1;
+                if (length > k) break;
+                if (dp[j - 1] != Integer.MAX_VALUE) {
+                    int extraSpaces = k - length;
+                    int costLine = extraSpaces * extraSpaces;
+                    if (i == n) costLine = 0; 
+                    dp[i] = Math.min(dp[i], dp[j - 1] + costLine);
+                }
+            }
+        }
+        
+        return dp[n]; 
+    }
+}
