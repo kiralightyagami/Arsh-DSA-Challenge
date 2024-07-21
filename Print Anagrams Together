@@ -1,0 +1,33 @@
+class Solution {
+    public List<List<String>> Anagrams(String[] words) {
+        
+        Map<String, List<String>> map = new LinkedHashMap<>();
+
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            
+            char[] charArray = word.toCharArray();
+            Arrays.sort(charArray);
+            String sortedWord = new String(charArray);
+
+            
+            if (!map.containsKey(sortedWord)) {
+                map.put(sortedWord, new ArrayList<>());
+            }
+            map.get(sortedWord).add(word);
+        }
+
+        
+        List<List<String>> result = new ArrayList<>();
+        
+        Iterator<Map.Entry<String, List<String>>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            List<String> group = iterator.next().getValue();
+            
+            Collections.sort(group);
+            result.add(group);
+        }
+        
+        return result;
+    }
+}
