@@ -1,0 +1,49 @@
+class Solution {
+  
+    public static long findPages(int n, int[] arr, int m) {
+         
+        if (m > n) return -1;
+
+        
+        int low = Integer.MAX_VALUE;
+        int high = 0;
+        for (int pages : arr) {
+            low = Math.min(low, pages);
+            high += pages;
+        }
+
+        int result = high;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (isPossible(arr, n, m, mid)) {
+                result = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return result;
+    }
+    private static boolean isPossible(int[] arr, int n, int m, int maxPages) {
+        int studentsRequired = 1;
+        int currentSum = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (arr[i] > maxPages) {
+                return false;
+            }
+            if (currentSum + arr[i] > maxPages) {
+                studentsRequired++;
+                currentSum = arr[i];
+                if (studentsRequired > m) {
+                    return false;
+                }
+            } else {
+                currentSum += arr[i];
+            }
+        }
+        return true;
+    }
+};
