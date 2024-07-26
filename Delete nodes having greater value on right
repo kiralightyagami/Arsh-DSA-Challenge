@@ -1,0 +1,43 @@
+class Solution
+{
+    Node compute(Node head)
+    {
+       if (head == null || head.next == null) {
+            return head;
+        }
+        
+        
+        head = reverseList(head);
+        
+        
+        Node maxNode = head;
+        Node current = head;
+        
+        while (current != null && current.next != null) {
+            if (current.next.data < maxNode.data) {
+                current.next = current.next.next; 
+            } else {
+                current = current.next;
+                maxNode = current;
+            }
+        }
+        
+        
+        head = reverseList(head);
+        
+        return head;
+    }
+    private Node reverseList(Node head) {
+        Node prev = null;
+        Node current = head;
+        while (current != null) {
+            Node next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        return prev;
+    }
+
+}
+  
