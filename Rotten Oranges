@@ -1,0 +1,60 @@
+class Solution
+{
+    private static final int[] dRow = {0, 0, 1, -1};
+    private static final int[] dCol = {1, -1, 0, 0};
+    public int orangesRotting(int[][] grid)
+    {
+       if (grid == null || grid.length == 0) return -1;
+
+        int rows = grid.length;
+        int cols = grid[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        int freshOranges = 0;
+
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (grid[i][j] == 2) {
+                    queue.offer(new int[]{i, j});
+                } else if (grid[i][j] == 1) {
+                    freshOranges++;
+                }
+            }
+        }
+
+        
+        if (freshOranges == 0) return 0;
+
+        int minutes = 0;
+
+        
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            boolean rottenOccurred = false;
+
+            for (int i = 0; i < size; i++) {
+                int[] orange = queue.poll();
+                int row = orange[0];
+                int col = orange[1];
+
+                for (int d = 0; d < 4; d++) {
+                    int newRow = row + dRow[d];
+                    int newCol = col + dCol[d];
+
+                    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && grid[newRow][newCol] == 1) {
+                        grid[newRow][newCol] = 2; 
+                        queue.offer(new int[]{newRow, newCol});
+                        freshOranges--;
+                        rottenOccurred = true;
+                    }
+                }
+            }
+
+            if (rottenOccurred) {
+                minutes++;
+            }
+        }
+
+        return freshOranges == 0 ? minutes : -1;
+    }
+}
