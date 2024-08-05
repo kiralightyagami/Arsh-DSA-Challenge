@@ -1,0 +1,45 @@
+static class Solution {
+    // Function that constructs BST from its preorder traversal.
+     private static Node buildBSTUtil(int[] pre, int[] preIndex, int key, int min, int max, int size) {
+        // Base case
+        if (preIndex[0] >= size) {
+            return null;
+        }
+
+        Node root = null;
+
+        // If the current element of preorder is in the range [min, max]
+        if (key > min && key < max) {
+            // Create the root node for the current key
+            root = new Node(key);
+            preIndex[0]++; // Move to the next index in preorder array
+
+            // Construct the left and right subtrees
+            if (preIndex[0] < size) {
+                root.left = buildBSTUtil(pre, preIndex, pre[preIndex[0]], min, key, size);
+            }
+            if (preIndex[0] < size) {
+                root.right = buildBSTUtil(pre, preIndex, pre[preIndex[0]], key, max, size);
+            }
+        }
+        return root;
+    }
+
+    // Function that constructs BST from its preorder traversal
+    public Node Bst(int pre[], int size) {
+        int[] preIndex = {0}; // Use array to pass index by reference
+        return buildBSTUtil(pre, preIndex, pre[0], Integer.MIN_VALUE, Integer.MAX_VALUE, size);
+    }
+    
+    // Method to print inorder traversal of the tree
+    public static void printInorder(Node root) {
+        if (root == null) {
+            return;
+        }
+        printInorder(root.left);
+        System.out.print(root.data + " ");
+        printInorder(root.right);
+    }
+
+ 
+}
