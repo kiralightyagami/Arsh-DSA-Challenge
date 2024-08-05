@@ -1,0 +1,34 @@
+class Solution {
+    private static final int NOT_MONITORED = 0;
+    private static final int MONITORED_NO_CAMERA = 1;
+    private static final int MONITORED_WITH_CAMERA = 2;
+    
+    private int cameras;
+    public int minCameraCover(TreeNode root) {
+       cameras = 0;
+        if (dfs(root) == NOT_MONITORED) {
+            cameras++;
+        }
+        return cameras;
+    }
+
+    private int dfs(TreeNode node) {
+        if (node == null) {
+            return MONITORED_NO_CAMERA;
+        }
+        
+        int left = dfs(node.left);
+        int right = dfs(node.right);
+        
+        if (left == NOT_MONITORED || right == NOT_MONITORED) {
+            cameras++;
+            return MONITORED_WITH_CAMERA;
+        }
+        
+        if (left == MONITORED_WITH_CAMERA || right == MONITORED_WITH_CAMERA) {
+            return MONITORED_NO_CAMERA;
+        }
+        
+        return NOT_MONITORED; 
+    }
+}
