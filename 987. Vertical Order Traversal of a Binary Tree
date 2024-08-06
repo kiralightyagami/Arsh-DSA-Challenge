@@ -1,0 +1,60 @@
+class Pair {
+    TreeNode node;
+    int row;
+    int col;
+
+    Pair(TreeNode node, int row, int col) {
+        this.node = node;
+        this.row = row;
+        this.col = col;
+    }
+}
+
+class Solution {
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+         TreeMap<Integer, List<Pair>> columnTable = new TreeMap<>();
+        // Queue to perform BFS traversal
+        Queue<Pair> queue = new LinkedList<>();
+
+        queue.offer(new Pair(root, 0, 0));
+
+        while (!queue.isEmpty()) {
+            Pair pair = queue.poll();
+            TreeNode node = pair.node;
+            int row = pair.row;
+            int col = pair.col;
+
+            if (!columnTable.containsKey(col)) {
+                columnTable.put(col, new ArrayList<>());
+            }
+            columnTable.get(col).add(pair);
+
+            if (node.left != null) {
+                queue.offer(new Pair(node.left, row + 1, col - 1));
+            }
+            if (node.right != null) {
+                queue.offer(new Pair(node.right, row + 1, col + 1));
+            }
+        }
+
+        List<List<Integer>> result = new ArrayList<>();
+        for (List<Pair> pairs : columnTable.values()) {
+            // Sort pairs by row index and then by node value
+            pairs.sort((a, b) -> {
+                if (a.row == b.row) {
+                    return Integer.compare(a.node.val, b.node.val);
+                } else {
+                    return Integer.compare(a.row, b.row);
+                }
+            });
+            List<Integer> sortedColumn = new ArrayList<>();
+            for (Pair pair : pairs) {
+                sortedColumn.add(pair.node.val);
+            }
+            result.add(sortedColumn);
+        }
+
+        return result;
+    
+    }
+}
