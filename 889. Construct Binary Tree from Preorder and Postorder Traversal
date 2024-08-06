@@ -1,0 +1,32 @@
+class Solution {
+    int preorderIndex;
+    Map<Integer, Integer> postorderIndexMap;
+    public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
+        preorderIndex = 0;
+        postorderIndexMap = new HashMap<>();
+        for (int i = 0; i < postorder.length; i++) {
+            postorderIndexMap.put(postorder[i], i);
+        }
+        return constructTree(preorder, postorder, 0, postorder.length - 1);
+    }
+
+    private TreeNode constructTree(int[] preorder, int[] postorder, int postStart, int postEnd) {
+        if (postStart > postEnd || preorderIndex >= preorder.length) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(preorder[preorderIndex++]);
+        if (postStart == postEnd || preorderIndex >= preorder.length) {
+            return root;
+        }
+
+        int leftRootIndex = postorderIndexMap.get(preorder[preorderIndex]);
+        if (leftRootIndex < postEnd) {
+            root.left = constructTree(preorder, postorder, postStart, leftRootIndex);
+            root.right = constructTree(preorder, postorder, leftRootIndex + 1, postEnd - 1);
+        }
+
+        return root;
+    
+    }
+}
