@@ -1,0 +1,46 @@
+class Solution{
+    
+     static class SubtreeInfo {
+        boolean isBST;
+        int size;
+        int min;
+        int max;
+
+        SubtreeInfo(boolean isBST, int size, int min, int max) {
+            this.isBST = isBST;
+            this.size = size;
+            this.min = min;
+            this.max = max;
+        }
+    }
+    static int largestBst(Node root)
+    {
+       return largestBstHelper(root).size;
+    }
+
+    private static SubtreeInfo largestBstHelper(Node node) {
+        
+        if (node == null) {
+            return new SubtreeInfo(true, 0, Integer.MAX_VALUE, Integer.MIN_VALUE);
+        }
+
+        
+        SubtreeInfo leftInfo = largestBstHelper(node.left);
+        SubtreeInfo rightInfo = largestBstHelper(node.right);
+
+        
+        if (leftInfo.isBST && rightInfo.isBST && node.data > leftInfo.max && node.data < rightInfo.min) {
+            // Current subtree is a BST
+            int size = leftInfo.size + rightInfo.size + 1;
+            int min = Math.min(node.data, leftInfo.min);
+            int max = Math.max(node.data, rightInfo.max);
+            return new SubtreeInfo(true, size, min, max);
+        } else {
+           
+            return new SubtreeInfo(false, Math.max(leftInfo.size, rightInfo.size), 0, 0);
+        
+        
+    }
+    
+}
+}
