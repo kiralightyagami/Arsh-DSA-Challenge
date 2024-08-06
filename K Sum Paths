@@ -1,0 +1,33 @@
+class Solution {
+    public int sumK(Node root, int k) {
+         if (root == null) return 0;
+        
+        HashMap<Integer, Integer> prefixSumCount = new HashMap<>();
+        
+        prefixSumCount.put(0, 1);
+        return dfs(root, k, 0, prefixSumCount);
+    }
+    
+    private int dfs(Node node, int k, int currentSum, HashMap<Integer, Integer> prefixSumCount) {
+        if (node == null) return 0;
+        
+       
+        currentSum += node.data;
+        
+        
+        int numPathsToCurr = prefixSumCount.getOrDefault(currentSum - k, 0);
+        
+       
+        prefixSumCount.put(currentSum, prefixSumCount.getOrDefault(currentSum, 0) + 1);
+        
+        
+        int result = numPathsToCurr 
+                    + dfs(node.left, k, currentSum, prefixSumCount)
+                    + dfs(node.right, k, currentSum, prefixSumCount);
+        
+        
+        prefixSumCount.put(currentSum, prefixSumCount.get(currentSum) - 1);
+        
+        return result;
+    }
+}
