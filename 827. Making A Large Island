@@ -1,0 +1,62 @@
+class Solution {
+    private static final int[] DIRS = {0, 1, 0, -1, 0};
+    public int largestIsland(int[][] grid) {
+       int n = grid.length;
+        int[][] group = new int[n][n];
+        Map<Integer, Integer> areaMap = new HashMap<>();
+        int groupId = 2;
+        int maxArea = 0;
+
+       
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1 && group[i][j] == 0) {
+                    int area = dfs(grid, group, i, j, groupId);
+                    areaMap.put(groupId, area);
+                    maxArea = Math.max(maxArea, area);
+                    groupId++;
+                }
+            }
+        }
+
+       
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0) {
+                    Set<Integer> seen = new HashSet<>();
+                    int area = 1; // We are converting this 0 to 1, so starting with area 1.
+
+                    for (int d = 0; d < 4; d++) {
+                        int ni = i + DIRS[d], nj = j + DIRS[d + 1];
+                        if (ni >= 0 && ni < n && nj >= 0 && nj < n) {
+                            int id = group[ni][nj];
+                            if (id > 0 && seen.add(id)) {
+                                area += areaMap.get(id);
+                            }
+                        }
+                    }
+
+                    maxArea = Math.max(maxArea, area);
+                }
+            }
+        }
+
+        return maxArea;
+    }
+
+
+    private int dfs(int[][] grid, int[][] group, int i, int j, int groupId) {
+        int n = grid.length;
+        group[i][j] = groupId;
+        int area = 1;
+
+        for (int d = 0; d < 4; d++) {
+            int ni = i + DIRS[d], nj = j + DIRS[d + 1];
+            if (ni >= 0 && ni < n && nj >= 0 && nj < n && grid[ni][nj] == 1 && group[ni][nj] == 0) {
+                area += dfs(grid, group, ni, nj, groupId);
+            }
+        }
+
+        return area; 
+    }
+}
