@@ -1,0 +1,33 @@
+class Solution{
+    int index = 0;
+
+    Node constructTree(int n, int pre[], char preLN[]) {
+      
+        return constructTreeUtil(pre, preLN, n);
+    }
+
+    private Node constructTreeUtil(int pre[], char preLN[], int n) {
+ 
+        if (index == n) {
+            return null;
+        }
+
+ 
+        Node node = new Node(pre[index]);
+
+       
+        int currIndex = index;
+
+       
+        index++;
+
+        
+        if (preLN[currIndex] == 'N') {
+            node.left = constructTreeUtil(pre, preLN, n);
+            node.right = constructTreeUtil(pre, preLN, n);
+        }
+
+    
+        return node;
+    }
+}
