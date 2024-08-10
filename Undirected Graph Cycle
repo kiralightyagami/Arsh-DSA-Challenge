@@ -1,0 +1,42 @@
+class Solution {
+   
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
+        boolean[] visited = new boolean[V];
+        
+        
+        for (int i = 0; i < V; i++) {
+            // If a vertex is not visited, start DFS from that vertex
+            if (!visited[i]) {
+               
+                if (isCyclicDFS(i, -1, visited, adj)) {
+                    return true;
+                }
+            }
+        }
+        
+        
+        return false;
+    }
+    
+  
+    private boolean isCyclicDFS(int v, int parent, boolean[] visited, ArrayList<ArrayList<Integer>> adj) {
+        
+        visited[v] = true;
+        
+        
+        for (Integer neighbor : adj.get(v)) {
+           
+            if (!visited[neighbor]) {
+                if (isCyclicDFS(neighbor, v, visited, adj)) {
+                    return true;
+                }
+            }
+           
+            else if (neighbor != parent) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+}
