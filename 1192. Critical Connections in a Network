@@ -1,0 +1,55 @@
+class Solution {
+    private List<List<Integer>> graph;
+    private int[] discoveryTime, lowestTime;
+    private int time;
+    private List<List<Integer>> criticalConnections;
+
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+       
+        graph = new ArrayList<>();
+        discoveryTime = new int[n];
+        lowestTime = new int[n];
+        Arrays.fill(discoveryTime, -1); 
+        criticalConnections = new ArrayList<>();
+        time = 0;
+
+       
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (List<Integer> connection : connections) {
+            int u = connection.get(0);
+            int v = connection.get(1);
+            graph.get(u).add(v);
+            graph.get(v).add(u);
+        }
+
+      
+        dfs(0, -1);
+
+        return criticalConnections;
+    }
+
+    private void dfs(int current, int parent) {
+        discoveryTime[current] = lowestTime[current] = time++;
+        
+        for (int neighbor : graph.get(current)) {
+            if (neighbor == parent) continue;
+            
+            if (discoveryTime[neighbor] == -1) { 
+                dfs(neighbor, current);
+                
+                
+                lowestTime[current] = Math.min(lowestTime[current], lowestTime[neighbor]);
+
+               
+                if (lowestTime[neighbor] > discoveryTime[current]) {
+                    criticalConnections.add(Arrays.asList(current, neighbor));
+                }
+            } else {
+               
+                lowestTime[current] = Math.min(lowestTime[current], discoveryTime[neighbor]);
+            }
+        }
+    }
+}
