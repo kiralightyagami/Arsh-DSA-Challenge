@@ -1,0 +1,24 @@
+class Solution
+{
+    public static int wordBreak(String A, ArrayList<String> B )
+    {
+         HashSet<String> wordDict = new HashSet<>(B);
+        
+        
+        boolean[] dp = new boolean[A.length() + 1];
+        dp[0] = true; 
+        
+       
+        for (int i = 1; i <= A.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && wordDict.contains(A.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        
+        
+        return dp[A.length()] ? 1 : 0;
+    }
+}
