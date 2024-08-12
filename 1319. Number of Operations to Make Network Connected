@@ -1,0 +1,71 @@
+class Solution {
+    public int makeConnected(int n, int[][] connections) {
+        if (connections.length < n - 1) {
+            return -1;
+        }
+        
+       
+        UnionFind uf = new UnionFind(n);
+        
+       
+        for (int[] connection : connections) {
+            uf.union(connection[0], connection[1]);
+        }
+        
+        
+        int numComponents = uf.getCount();
+        
+        
+        return numComponents - 1;
+    }
+
+
+
+class UnionFind {
+    private int[] parent;
+    private int[] rank;
+    private int count;
+    
+    public UnionFind(int size) {
+        parent = new int[size];
+        rank = new int[size];
+        count = size;
+        for (int i = 0; i < size; i++) {
+            parent[i] = i;
+            rank[i] = 1;
+        }
+    }
+    
+    public int find(int p) {
+        if (parent[p] != p) {
+            parent[p] = find(parent[p]); 
+        }
+        return parent[p];
+    }
+    
+    public boolean union(int p, int q) {
+        int rootP = find(p);
+        int rootQ = find(q);
+        if (rootP == rootQ) {
+            return false;
+        }
+        
+        
+        if (rank[rootP] > rank[rootQ]) {
+            parent[rootQ] = rootP;
+        } else if (rank[rootP] < rank[rootQ]) {
+            parent[rootP] = rootQ;
+        } else {
+            parent[rootQ] = rootP;
+            rank[rootP]++;
+        }
+        
+        count--;
+        return true;
+    }
+    
+    public int getCount() {
+        return count;
+    }
+    }
+}
