@@ -1,0 +1,33 @@
+class Solution{
+    static ArrayList<ArrayList<String>> displayContacts(int n, String contact[], String s){
+      ArrayList<ArrayList<String>> result = new ArrayList<>();
+
+        
+        TreeSet<String> contactSet = new TreeSet<>(Arrays.asList(contact));
+
+        
+        String[] sortedContacts = contactSet.toArray(new String[0]);
+
+       
+        for (int i = 1; i <= s.length(); i++) {
+            String prefix = s.substring(0, i);
+            ArrayList<String> matchingContacts = new ArrayList<>();
+
+           
+            for (String con : sortedContacts) {
+                if (con.startsWith(prefix)) {
+                    matchingContacts.add(con);
+                }
+            }
+
+            
+            if (matchingContacts.isEmpty()) {
+                matchingContacts.add("0");
+            }
+
+            result.add(matchingContacts);
+        }
+
+        return result;
+    }
+}
