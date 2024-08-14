@@ -1,0 +1,36 @@
+class Solution {
+    static int spanningTree(int V, int E, List<List<int[]>> adj) {
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        
+        boolean[] visited = new boolean[V];
+        pq.offer(new int[]{0, 0}); 
+        
+        int sum = 0;
+        int edgesCount = 0;
+        
+        while (!pq.isEmpty() && edgesCount < V) {
+            int[] current = pq.poll();
+            int weight = current[0];
+            int u = current[1];
+            
+            if (visited[u]) continue;  
+            
+           
+            sum += weight;
+            visited[u] = true;
+            edgesCount++;
+            
+           
+            for (int[] neighbor : adj.get(u)) {
+                int v = neighbor[0];
+                int w = neighbor[1];
+                
+                if (!visited[v]) {
+                    pq.offer(new int[]{w, v});
+                }
+            }
+        }
+        
+        return sum;
+    }
+}
