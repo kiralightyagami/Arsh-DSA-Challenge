@@ -1,0 +1,53 @@
+class Solution {
+    public boolean isPossible(int N,int P, int[][] prerequisites)
+    {
+       List<List<Integer>> adjList = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            adjList.add(new ArrayList<>());
+        }
+        
+        
+        int[] inDegree = new int[N];
+        
+       
+        for (int[] prerequisite : prerequisites) {
+            int u = prerequisite[1];
+            int v = prerequisite[0];
+            adjList.get(u).add(v);
+            inDegree[v]++;
+        }
+        
+       
+        Queue<Integer> queue = new LinkedList<>();
+        
+       
+        for (int i = 0; i < N; i++) {
+            if (inDegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+        
+       
+        int count = 0;
+        
+        
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            count++;
+            
+           
+            for (int neighbor : adjList.get(current)) {
+                inDegree[neighbor]--;
+                
+                
+                if (inDegree[neighbor] == 0) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+        
+        
+        return count == N;
+    }
+    
+}
