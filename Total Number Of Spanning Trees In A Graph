@@ -1,0 +1,73 @@
+class Solution {
+    public static int countSpanningTrees(int[][] graph,int n,int m) {
+int[][] degreeMatrix = new int[n][n];
+        int[][] adjMatrix = new int[n][n];
+        
+        for (int[] edge : graph) {
+            int u = edge[0];
+            int v = edge[1];
+            adjMatrix[u][v] = 1;
+            adjMatrix[v][u] = 1;
+            degreeMatrix[u][u]++;
+            degreeMatrix[v][v]++;
+        }
+
+       
+        int[][] laplacianMatrix = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                laplacianMatrix[i][j] = degreeMatrix[i][j] - adjMatrix[i][j];
+            }
+        }
+
+       
+        int[][] cofactorMatrix = new int[n-1][n-1];
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j < n; j++) {
+                cofactorMatrix[i-1][j-1] = laplacianMatrix[i][j];
+            }
+        }
+
+        
+        return determinant(cofactorMatrix, n - 1);
+    }
+
+  
+    private static int determinant(int[][] matrix, int n) {
+        if (n == 1) {
+            return matrix[0][0];
+        }
+        
+        if (n == 2) {
+            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+        }
+
+        int det = 0;
+        int[][] temp = new int[n-1][n-1];
+
+        for (int p = 0; p < n; p++) {
+            getCofactor(matrix, temp, 0, p, n);
+            det += Math.pow(-1, p) * matrix[0][p] * determinant(temp, n-1);
+        }
+
+        return det;
+    }
+
+  
+    private static void getCofactor(int[][] matrix, int[][] temp, int row, int col, int n) {
+        int i = 0, j = 0;
+
+        for (int r = 0; r < n; r++) {
+            for (int c = 0; c < n; c++) {
+                if (r != row && c != col) {
+                    temp[i][j++] = matrix[r][c];
+                    if (j == n - 1) {
+                        j = 0;
+                        i++;
+                    }
+                }
+            }
+        }
+    }
+}
+        
