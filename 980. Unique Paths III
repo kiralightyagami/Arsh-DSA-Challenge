@@ -1,0 +1,57 @@
+class Solution {
+    private int rows, cols, totalEmptySquares, result;
+    private int[][] grid;
+    private int[] start;
+    private final int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    
+    public int uniquePathsIII(int[][] grid) {
+        this.grid = grid;
+        rows = grid.length;
+        cols = grid[0].length;
+        totalEmptySquares = 0;
+        result = 0;
+        
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (grid[i][j] == 1) {
+                    start = new int[]{i, j};
+                } else if (grid[i][j] == 0) {
+                    totalEmptySquares++;
+                }
+            }
+        }
+        
+        
+        backtrack(start[0], start[1], -1);  
+        
+        return result;
+    }
+    
+    private void backtrack(int row, int col, int count) {
+        
+        if (grid[row][col] == 2) {
+            if (count == totalEmptySquares) {
+                result++;
+            }
+            return;
+        }
+        
+        
+        int temp = grid[row][col];
+        grid[row][col] = -1;
+        
+        
+        for (int[] dir : directions) {
+            int newRow = row + dir[0];
+            int newCol = col + dir[1];
+            
+            if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && grid[newRow][newCol] != -1) {
+                backtrack(newRow, newCol, count + 1);
+            }
+        }
+        
+        
+        grid[row][col] = temp;
+    }
+}
