@@ -1,0 +1,63 @@
+class Solution
+{
+    
+    public static String findMaximumNum(String str, int k)
+        {
+         String[] max = {str};
+
+        
+        findMaximumNumHelper(str.toCharArray(), k, max, 0);
+
+       
+        return max[0];
+    }
+
+    private static void findMaximumNumHelper(char[] str, int k, String[] max, int index) {
+       
+        if (k == 0 || index == str.length) {
+            return;
+        }
+
+        int n = str.length;
+        char maxChar = str[index];
+
+       
+        for (int i = index + 1; i < n; i++) {
+            if (str[i] > maxChar) {
+                maxChar = str[i];
+            }
+        }
+
+        
+        if (maxChar != str[index]) {
+            for (int i = index; i < n; i++) {
+                if (str[i] == maxChar) {
+                    
+                    swap(str, index, i);
+
+                    
+                    String newStr = new String(str);
+                    if (newStr.compareTo(max[0]) > 0) {
+                        max[0] = newStr;
+                    }
+
+                    
+                    findMaximumNumHelper(str, k - 1, max, index + 1);
+
+                    
+                    swap(str, index, i);
+                }
+            }
+        } else {
+            
+            findMaximumNumHelper(str, k, max, index + 1);
+        }
+    }
+
+   
+    private static void swap(char[] str, int i, int j) {
+        char temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+    }
+}
