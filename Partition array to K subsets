@@ -1,0 +1,40 @@
+class Solution
+{
+    public boolean isKPartitionPossible(int a[], int n, int k)
+    {
+	if (k == 1) return true;
+        if (k > n) return false;
+        
+        int totalSum = 0;
+        for (int num : a) {
+            totalSum += num;
+        }
+        
+        if (totalSum % k != 0) return false;
+        
+        int targetSum = totalSum / k;
+        boolean[] visited = new boolean[n];
+        
+        return canPartition(0, a, visited, k, 0, 0, targetSum);
+    }
+    
+    private boolean canPartition(int index, int[] a, boolean[] visited, int k, int currentSum, int currentIndex, int targetSum) {
+        if (k == 1) return true;  
+        if (currentSum == targetSum) {
+            
+            return canPartition(0, a, visited, k - 1, 0, 0, targetSum);
+        }
+        
+        for (int i = index; i < a.length; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                if (canPartition(i + 1, a, visited, k, currentSum + a[i], currentIndex + 1, targetSum)) {
+                    return true;
+                }
+                visited[i] = false; 
+            }
+        }
+        
+        return false;	
+    }
+}
