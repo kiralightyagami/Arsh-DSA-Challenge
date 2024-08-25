@@ -1,0 +1,44 @@
+public class ChocolateBreaking {
+
+    public static int minCostToBreakChocolate(int[] verticalCuts, int[] horizontalCuts) {
+        
+        Arrays.sort(verticalCuts);
+        Arrays.sort(horizontalCuts);
+        
+        int m = verticalCuts.length + 1;
+        int n = horizontalCuts.length + 1;
+        
+        int verticalPieces = 1;
+        int horizontalPieces = 1;
+        int cost = 0;
+        
+        int i = verticalCuts.length - 1; 
+        int j = horizontalCuts.length - 1; 
+        
+       
+        while (i >= 0 && j >= 0) {
+            if (verticalCuts[i] > horizontalCuts[j]) {
+                cost += verticalCuts[i] * horizontalPieces;
+                verticalPieces++;
+                i--;
+            } else {
+                cost += horizontalCuts[j] * verticalPieces;
+                horizontalPieces++;
+                j--;
+            }
+        }
+        
+       
+        while (i >= 0) {
+            cost += verticalCuts[i] * horizontalPieces;
+            i--;
+        }
+        
+       
+        while (j >= 0) {
+            cost += horizontalCuts[j] * verticalPieces;
+            j--;
+        }
+        
+        return cost;
+    }
