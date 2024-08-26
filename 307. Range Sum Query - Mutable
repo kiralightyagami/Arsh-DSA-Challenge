@@ -1,0 +1,52 @@
+class NumArray {
+
+    private int[] segmentTree;
+    private int n;
+
+    public NumArray(int[] nums) {
+        n = nums.length;
+        segmentTree = new int[2 * n];
+        buildSegmentTree(nums);
+    }
+
+    private void buildSegmentTree(int[] nums) {
+        
+        for (int i = 0; i < n; i++) {
+            segmentTree[i + n] = nums[i];
+        }
+        
+        for (int i = n - 1; i > 0; --i) {
+            segmentTree[i] = segmentTree[2 * i] + segmentTree[2 * i + 1];
+        }
+    }
+
+    public void update(int index, int val) {
+        
+        index += n;
+        segmentTree[index] = val;
+        
+        while (index > 1) {
+            index /= 2;
+            segmentTree[index] = segmentTree[2 * index] + segmentTree[2 * index + 1];
+        }
+    }
+
+    public int sumRange(int left, int right) {
+        int sum = 0;
+        left += n;
+        right += n;
+        while (left <= right) {
+            if ((left % 2) == 1) {
+                sum += segmentTree[left];
+                left++;
+            }
+            if ((right % 2) == 0) {
+                sum += segmentTree[right];
+                right--;
+            }
+            left /= 2;
+            right /= 2;
+        }
+        return sum;
+    }
+}
